@@ -3,6 +3,7 @@
 
 ## Step 01: 스터디 중 각자 챕터에서 중요하다고 생각되는 부분 정리
 정리한 문장 형식은 다음과 같음
+
 <img width="567" alt="스크린샷 2023-09-30 오후 6 49 08" src="https://github.com/Gopistol/book-study-manager/assets/104254012/080da006-62ec-47fd-b32a-c1fc9469816a">
 
 ## Step 02: 스터디원별 정리한 문장들을 하나로 취합해 입력
