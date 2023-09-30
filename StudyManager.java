@@ -15,14 +15,14 @@ class Sentence {
 
   public Sentence(String sentence) {
     String[] tokens = sentence.split("\\(");
-    this.content = tokens[0].trim();
+    this.content = tokens[0].replace("-", "").trim();
     this.page = Integer.parseInt(tokens[1].replace(")", ""));
   }
 
 
   @Override
   public String toString() {
-    return isBold ? "(중복) " + content + " (" + page + ")" : content + " (" + page + ")";
+    return isBold ? "- **" + content + " (" + page + ")**" : "- " + content + " (" + page + ")";
   }
 
   public String getContent() {
@@ -71,29 +71,15 @@ public class StudyManager {
     }
   }
 
-  public static int pageSplitBySeparator(String sentence) {
-    List<String> tokens = List.of(sentence.split("\\s+|\\(|\\)"));
-    // 마지막 토큰 찾기
-    Optional<String> optionalPage = tokens.stream().reduce((first, second) -> second);
-    if (optionalPage.isPresent()) {
-      return Integer.parseInt(optionalPage.get());
-    } else {
-      throw new IllegalArgumentException("문장 뒤에 (페이지)가 올 수 있게 적어주세요.");
-    }
-  }
-
   public static boolean isDuplicatedSentence(List<Sentence> sentences, String target) {
     // 각 문장 별 단어가 반절 이상이 같으면 겹치는 문장이라고 판단
-    List<String> targetTokens = List.of(target.split("\\s+|\\-"));
+    List<String> targetTokens = List.of(target.replace("-", "").trim().split("\\s+"));
     for (Sentence sentence : sentences) {
-      List<String> sentenceTokens = Arrays.stream(sentence.getContent().split("\\s+|-"))
+      List<String> sentenceTokens = Arrays.stream(sentence.getContent().split("\\s+"))
           .collect(Collectors.toList());
-
       long commonTokensCount = IntStream.range(0,
               Math.min(targetTokens.size(), sentenceTokens.size()))
-          .filter(i -> Objects.equals(targetTokens.get(i), sentenceTokens.get(i)))
-          .count();
-
+          .filter(i -> Objects.equals(targetTokens.get(i), sentenceTokens.get(i))).count();
       if (commonTokensCount > Math.min(targetTokens.size(), sentenceTokens.size()) / 2) {
         return true;
       }
